@@ -1,5 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { Text, View, TouchableOpacity, ScrollView, Image } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { styled } from "nativewind";
 import {
   MaterialIcons,
@@ -7,7 +14,10 @@ import {
   FontAwesome5,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { supabase } from "../services/supabaseClient";
 import { useUser } from "../services/userContext";
+import { useState, useEffect } from "react";
+
 const StyledView = styled(View);
 const StyledText = styled(Text);
 const StyledTouchableOpacity = styled(TouchableOpacity);
@@ -40,11 +50,87 @@ const ChallengeCard = ({ title, level, progress, color }) => (
 
 export default function DashboardScreen({ navigation }) {
   const { user, setUser } = useUser();
-  if (!user) {
-    setUser(null);
-    navigation.navigate("Login");
-    return null;
+  const [loading, setLoading] = useState(true);
+  const [userStats, setUserStats] = useState(null);
+  const [activeChallenges, setActiveChallenges] = useState([]);
+  const [streak, setStreak] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    if (!user) {
+      setUser(null);
+      navigation.navigate("Login");
+      return;
+    }
+
+    fetchUserData();
+  }, [user]);
+
+  const fetchUserData = async () => {
+    try {
+      setLoading(true);
+
+      // Fetch user statistics
+      const { data: stats, error: statsError } = await supabase
+        .from("user_statistics")
+        .select("*")
+        .eq("user_id", user.id)
+        .single();
+
+      if (statsError) throw statsError;
+      setUserStats(stats);
+
+      // Fetch active challenges
+      const { data: challenges, error: challengesError } = await supabase
+        .from("user_challenges")
+        .select(
+          `
+          *,
+          challenge:challenges(*)
+        `
+        )
+        .eq("user_id", user.id)
+        .eq("status", "in_progress")
+        .limit(3);
+
+      if (challengesError) throw challengesError;
+      setActiveChallenges(challenges);
+
+      // Fetch streak data
+      const { data: streakData, error: streakError } = await supabase
+        .from("user_streaks")
+        .select("current_streak")
+        .eq("user_id", user.id)
+        .single();
+
+      if (streakError) throw streakError;
+      setStreak(streakData.current_streak);
+
+      // Fetch notifications
+      const { data: notifs, error: notifsError } = await supabase
+        .from("notifications")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("read", false)
+        .order("created_at", { ascending: false });
+
+      if (notifsError) throw notifsError;
+      setNotifications(notifs);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <StyledView className="flex-1 bg-gray-50 items-center justify-center">
+        <ActivityIndicator size="large" color="#059669" />
+      </StyledView>
+    );
   }
+
   return (
     <StyledView className="flex-1 bg-gray-50">
       <StatusBar style="dark" />
@@ -57,10 +143,17 @@ export default function DashboardScreen({ navigation }) {
               Dashboard
             </StyledText>
             <StyledText className="text-gray-500">
-              Welcome back, {user.user_metadata.username}
+              Welcome back, {user?.user_metadata.username}
             </StyledText>
           </StyledView>
           <StyledTouchableOpacity className="w-10 h-10 rounded-full bg-gray-100 items-center justify-center">
+            {notifications.length > 0 && (
+              <StyledView className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full items-center justify-center">
+                <StyledText className="text-white text-xs">
+                  {notifications.length}
+                </StyledText>
+              </StyledView>
+            )}
             <MaterialIcons
               name="notifications-none"
               size={24}
@@ -78,7 +171,7 @@ export default function DashboardScreen({ navigation }) {
               <MaterialIcons name="assessment" size={20} color="#059669" />
             </StyledView>
             <StyledText className="text-2xl font-bold text-gray-800 mt-2">
-              87
+              {userStats?.challenges_completed || 0}
             </StyledText>
             <StyledText className="text-gray-500 text-sm">
               Challenges Completed
@@ -89,7 +182,7 @@ export default function DashboardScreen({ navigation }) {
               <MaterialIcons name="emoji-events" size={20} color="#2563EB" />
             </StyledView>
             <StyledText className="text-2xl font-bold text-gray-800 mt-2">
-              1,234
+              {userStats?.total_points || 0}
             </StyledText>
             <StyledText className="text-gray-500 text-sm">
               Total Points
@@ -116,13 +209,13 @@ export default function DashboardScreen({ navigation }) {
               <StyledView key={index} className="items-center">
                 <StyledView
                   className={`w-8 h-8 rounded-full items-center justify-center ${
-                    index < 5 ? "bg-emerald-500" : "bg-gray-200"
+                    index < streak ? "bg-emerald-500" : "bg-gray-200"
                   }`}
                 >
                   <MaterialIcons
                     name="check"
                     size={16}
-                    color={index < 5 ? "white" : "#9CA3AF"}
+                    color={index < streak ? "white" : "#9CA3AF"}
                   />
                 </StyledView>
                 <StyledText className="text-gray-600 mt-1">{day}</StyledText>
@@ -147,24 +240,15 @@ export default function DashboardScreen({ navigation }) {
             showsHorizontalScrollIndicator={false}
             className="mt-4 pl-6"
           >
-            <ChallengeCard
-              title="JavaScript Basics"
-              level="Beginner"
-              progress={75}
-              color="bg-emerald-500"
-            />
-            <ChallengeCard
-              title="Python Arrays"
-              level="Intermediate"
-              progress={45}
-              color="bg-blue-500"
-            />
-            <ChallengeCard
-              title="React Hooks"
-              level="Advanced"
-              progress={30}
-              color="bg-purple-500"
-            />
+            {activeChallenges.map((userChallenge) => (
+              <ChallengeCard
+                key={userChallenge.id}
+                title={userChallenge.challenge.title}
+                level={userChallenge.challenge.difficulty}
+                progress={userChallenge.progress}
+                color={`bg-${userChallenge.challenge.category_color}-500`}
+              />
+            ))}
           </StyledScrollView>
         </StyledView>
 
@@ -180,28 +264,33 @@ export default function DashboardScreen({ navigation }) {
                 title: "New Challenge",
                 color: "bg-emerald-100",
                 iconColor: "#059669",
+                onPress: () => navigation.navigate("NewChallenge"),
               },
               {
                 icon: "leaderboard",
                 title: "Leaderboard",
                 color: "bg-blue-100",
                 iconColor: "#2563EB",
+                onPress: () => navigation.navigate("Leaderboard"),
               },
               {
                 icon: "groups",
                 title: "Study Groups",
                 color: "bg-purple-100",
                 iconColor: "#7C3AED",
+                onPress: () => navigation.navigate("StudyGroups"),
               },
               {
                 icon: "psychology",
                 title: "Practice Mode",
                 color: "bg-orange-100",
                 iconColor: "#EA580C",
+                onPress: () => navigation.navigate("Practice"),
               },
             ].map((item, index) => (
               <StyledTouchableOpacity
                 key={index}
+                onPress={item.onPress}
                 className="w-[48%] bg-white p-4 rounded-xl mb-4 shadow-sm"
               >
                 <StyledView
@@ -231,9 +320,7 @@ export default function DashboardScreen({ navigation }) {
           </StyledText>
         </StyledTouchableOpacity>
         <StyledTouchableOpacity
-          onPress={() => {
-            navigation.navigate("Explore");
-          }}
+          onPress={() => navigation.navigate("Explore")}
           className="items-center"
         >
           <MaterialIcons name="explore" size={24} color="#9CA3AF" />

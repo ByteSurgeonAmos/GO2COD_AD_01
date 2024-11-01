@@ -13,6 +13,9 @@ import ProfileScreen from "./src/screens/ProfileScreen";
 import SettingsScreen from "./src/screens/SettingsScreen";
 import ForgotPasswordScreen from "./src/screens/ForgotPasswordScreen";
 import { UserProvider } from "./src/services/userContext";
+import NewChallengeScreen from "./src/screens/NewChallengeScreen";
+import ChallengeDetailsScreen from "./src/screens/ChallengeScreen";
+import QuizScreen from "./src/screens/QuizScreen";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -30,6 +33,12 @@ export default function App() {
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen name="Forgot" component={ForgotPasswordScreen} />
+            <Stack.Screen name="NewChallenge" component={NewChallengeScreen} />
+            <Stack.Screen
+              name="ChallengeDetails"
+              component={ChallengeDetailsScreen}
+            />
+            <Stack.Screen name="Quiz" component={QuizScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </ThemeProvider>
