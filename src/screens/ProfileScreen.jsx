@@ -1,9 +1,10 @@
+import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { Text, View, TouchableOpacity, ScrollView, Image } from "react-native";
 import { styled } from "nativewind";
 import { MaterialIcons } from "@expo/vector-icons";
 import { supabase } from "../services/supabaseClient";
-
+import { useUser } from "../services/userContext";
 const StyledView = styled(View);
 const StyledText = styled(Text);
 const StyledTouchableOpacity = styled(TouchableOpacity);
@@ -40,16 +41,34 @@ const MenuOption = ({ icon, title, subtitle, showBorder = true }) => (
 );
 
 export default function ProfileScreen({ navigation }) {
+  const { user, setUser } = useUser();
+  console.log(user?.user_metadata);
+  const [userStats, setUserStats] = React.useState(null);
   const logOut = async () => {
     let { error } = await supabase.auth.signOut();
     if (error) {
       console.error("Error signing out:", error);
       return;
     }
+    setUser(null);
 
     // Perform logout logic here
     navigation.navigate("Login");
   };
+  const getStats = async () => {
+    const { data: stats, error: statsError } = await supabase
+      .from("user_statistics")
+      .select("*")
+      .eq("user_id", user.id)
+      .single();
+
+    if (statsError) throw statsError;
+    setUserStats(stats);
+  };
+  React.useEffect(() => {
+    getStats();
+  }, []);
+  console.log(userStats);
   return (
     <StyledView className="flex-1 bg-gray-50">
       <StatusBar style="dark" />
@@ -78,15 +97,14 @@ export default function ProfileScreen({ navigation }) {
             </StyledView>
             <StyledView className="ml-4 flex-1">
               <StyledText className="text-xl font-bold text-gray-800">
-                Alex Johnson
+                {user?.user_metadata.full_name}
               </StyledText>
               <StyledText className="text-gray-500">
-                Frontend Developer
+                {user?.user_metadata.username}
               </StyledText>
               <StyledView className="flex-row items-center mt-1">
-                <MaterialIcons name="location-on" size={16} color="#9CA3AF" />
                 <StyledText className="text-gray-500 text-sm ml-1">
-                  San Francisco, CA
+                  {user?.user_metadata.email}
                 </StyledText>
               </StyledView>
             </StyledView>
@@ -99,7 +117,7 @@ export default function ProfileScreen({ navigation }) {
           <StyledView className="flex-row justify-between mt-6 pb-6 border-b border-gray-100">
             <StyledView className="items-center">
               <StyledText className="text-2xl font-bold text-gray-800">
-                87
+                {userStats?.challenges_completed}
               </StyledText>
               <StyledText className="text-gray-500 text-sm">
                 Completed
@@ -107,7 +125,7 @@ export default function ProfileScreen({ navigation }) {
             </StyledView>
             <StyledView className="items-center">
               <StyledText className="text-2xl font-bold text-gray-800">
-                1,234
+                {userStats?.total_points}
               </StyledText>
               <StyledText className="text-gray-500 text-sm">Points</StyledText>
             </StyledView>

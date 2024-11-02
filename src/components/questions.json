@@ -1,0 +1,190 @@
+[
+  {
+    "id": 1,
+    "question": "What is the output of the following code?\n\nconst sum = (a, b) => a + b;\nconsole.log(sum(2, 3));",
+    "answer": "5"
+  },
+  {
+    "id": 2,
+    "question": "What will be logged to the console when the following code runs?\n\nconst fruits = ['apple', 'banana', 'cherry'];\nconsole.log(fruits[1]);",
+    "answer": "banana"
+  },
+  {
+    "id": 3,
+    "question": "What is the result of the expression: 0.1 + 0.2 === 0.3?",
+    "answer": "false"
+  },
+  {
+    "id": 4,
+    "question": "What is the output of this code?\n\nconsole.log(typeof null);",
+    "answer": "object"
+  },
+  {
+    "id": 5,
+    "question": "What does the following code output?\n\nconsole.log(NaN === NaN);",
+    "answer": "false"
+  },
+  {
+    "id": 6,
+    "question": "What is the output of the following code?\n\nconsole.log(typeof undefined);",
+    "answer": "undefined"
+  },
+  {
+    "id": 7,
+    "question": "What will be logged to the console when the following code runs?\n\nlet a = 1;\nlet b = a++;\nconsole.log(b);",
+    "answer": "1"
+  },
+  {
+    "id": 8,
+    "question": "What is the output of the following code?\n\nconsole.log(0.1 + 0.2 === 0.3);",
+    "answer": "false"
+  },
+  {
+    "id": 9,
+    "question": "What will be the output of this code?\n\nconsole.log([1] == true);",
+    "answer": "true"
+  },
+  {
+    "id": 10,
+    "question": "What is the output of this code?\n\nconsole.log(1 + '1');",
+    "answer": "11"
+  },
+  {
+    "id": 11,
+    "question": "What will be the result of the following code?\n\nlet x = {a: 1};\nlet y = x;\ny.a = 2;\nconsole.log(x.a);",
+    "answer": "2"
+  },
+  {
+    "id": 12,
+    "question": "What is the output of this code?\n\nconsole.log([1, 2] == [1, 2]);",
+    "answer": "false"
+  },
+  {
+    "id": 13,
+    "question": "What does the following code output?\n\nconsole.log(typeof (3 + '3'));",
+    "answer": "string"
+  },
+  {
+    "id": 14,
+    "question": "What will be logged to the console when the following code runs?\n\nconst obj = { key: 'value' };\nconst key = 'key';\nconsole.log(obj[key]);",
+    "answer": "value"
+  },
+  {
+    "id": 15,
+    "question": "What is the output of the following code?\n\nconst arr = [1, 2, 3];\narr.push(4);\nconsole.log(arr.length);",
+    "answer": "4"
+  },
+
+  {
+    "id": 17,
+    "question": "What does the following code output?\n\nconsole.log('2' + 2 - 2);",
+    "answer": "20"
+  },
+  {
+    "id": 18,
+    "question": "What is the output of the following code?\n\nconsole.log(false == '0');",
+    "answer": "true"
+  },
+  {
+    "id": 19,
+    "question": "What will be the result of this code?\n\nconst arr = [1, 2, 3];\narr[10] = 10;\nconsole.log(arr.length);",
+    "answer": "11"
+  },
+  {
+    "id": 20,
+    "question": "What will the following code output?\n\nconst greet = (name) => `Hello, ${name}!`;\nconsole.log(greet('Alice'));",
+    "answer": "Hello, Alice!"
+  },
+  {
+    "id": 21,
+    "question": "What is the output of the following code?\n\nconsole.log(1 == '1');",
+    "answer": "true"
+  },
+  {
+    "id": 22,
+    "question": "What is the output of the following code?\n\nconst str = 'hello';\nconsole.log(str.toUpperCase());",
+    "answer": "HELLO"
+  },
+  {
+    "id": 23,
+    "question": "What is the output of the following code?\n\nconsole.log(2 + 2 == 4 && 2 * 2 == 4);",
+    "answer": "true"
+  },
+
+  {
+    "id": 25,
+    "question": "What is the result of the following expression: 'Hello, ' + 'World!'?",
+    "answer": "Hello, World!"
+  },
+  {
+    "id": 26,
+    "question": "What will be the output of this code?\n\nconsole.log([1, 2, 3].map(x => x * 2));",
+    "answer": "[2, 4, 6]"
+  },
+  {
+    "id": 27,
+    "question": "What will be the output of this code?\n\nconst obj = { a: 1, b: 2 };\nconsole.log(Object.keys(obj));",
+    "answer": "['a', 'b']"
+  },
+  {
+    "id": 28,
+    "question": "What does the following code output?\n\nconsole.log([...'hello']);",
+    "answer": "['h', 'e', 'l', 'l', 'o']"
+  },
+  {
+    "id": 29,
+    "question": "What will the following code log to the console?\n\nconst numbers = [1, 2, 3, 4, 5];\nconst doubled = numbers.map(n => n * 2);\nconsole.log(doubled);",
+    "answer": "[2, 4, 6, 8, 10]"
+  },
+  {
+    "id": 30,
+    "question": "What will be the output of the following code?\n\nconsole.log('1' == 1 && '1' === 1);",
+    "answer": "false"
+  },
+  {
+    "id": 31,
+    "question": "What will be logged to the console when the following code runs?\n\nconst x = 10;\nconst obj = { x: 20 };\nconsole.log(obj.x);",
+    "answer": "20"
+  },
+  {
+    "id": 32,
+    "question": "What is the output of this code?\n\nconsole.log(false + 1);",
+    "answer": "1"
+  },
+  {
+    "id": 33,
+    "question": "What will be logged to the console when the following code runs?\n\nconst arr = [1, 2, 3];\narr.pop();\nconsole.log(arr.length);",
+    "answer": "2"
+  },
+
+  {
+    "id": 35,
+    "question": "What does the following code output?\n\nconst arr = [1, 2, 3];\nconsole.log(arr.includes(2));",
+    "answer": "true"
+  },
+  {
+    "id": 36,
+    "question": "What will be logged to the console when the following code runs?\n\nconst a = { x: 10 };\nconst b = a;\nb.x = 20;\nconsole.log(a.x);",
+    "answer": "20"
+  },
+  {
+    "id": 37,
+    "question": "What is the output of the following code?\n\nconsole.log('hello'.charAt(1));",
+    "answer": "e"
+  },
+  {
+    "id": 38,
+    "question": "What will be logged to the console when the following code runs?\n\nconst a = [1, 2, 3];\nconst b = a;\na.push(4);\nconsole.log(b.length);",
+    "answer": "4"
+  },
+  {
+    "id": 39,
+    "question": "What is the output of the following code?\n\nconst add = (x, y) => x + y;\nconsole.log(add(5, 10));",
+    "answer": "15"
+  },
+  {
+    "id": 40,
+    "question": "What does the following code output?\n\nconsole.log(Math.random() > 0.5);",
+    "answer": "true or false"
+  }
+]

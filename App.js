@@ -16,6 +16,9 @@ import { UserProvider } from "./src/services/userContext";
 import NewChallengeScreen from "./src/screens/NewChallengeScreen";
 import ChallengeDetailsScreen from "./src/screens/ChallengeScreen";
 import QuizScreen from "./src/screens/QuizScreen";
+import LeaderboardScreen from "./src/screens/LeaderboardScreen";
+import StudyGroupsScreen from "./src/screens/StudygroupsScreen";
+import PracticeModeScreen from "./src/screens/PracticeModeScreen";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -38,6 +41,9 @@ export default function App() {
               name="ChallengeDetails"
               component={ChallengeDetailsScreen}
             />
+            <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
+            <Stack.Screen name="Practice" component={PracticeModeScreen} />
+            <Stack.Screen name="StudyGroups" component={StudyGroupsScreen} />
             <Stack.Screen name="Quiz" component={QuizScreen} />
           </Stack.Navigator>
         </NavigationContainer>

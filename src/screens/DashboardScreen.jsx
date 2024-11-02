@@ -25,7 +25,9 @@ const StyledScrollView = styled(ScrollView);
 
 const ChallengeCard = ({ title, level, progress, color }) => (
   <StyledTouchableOpacity
-    className={`${color} p-4 rounded-2xl flex-1 mx-2 min-w-[160px]`}
+    className={`${
+      color ? color : "bg-yellow-500"
+    } p-4 rounded-2xl flex-1 mx-2 min-w-[160px]`}
   >
     <StyledView className="flex-row justify-between items-start">
       <MaterialCommunityIcons name="code-brackets" size={24} color="white" />
